@@ -19,3 +19,12 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+-------------------------------------------------------------------------------
+
+THIRD-PARTY NOTICES
+
+The MIT license above covers Folio's own source code. Folio also bundles and
+depends on third-party software and assets under their own licenses, including
+the Monoton typeface (SIL Open Font License 1.1). See NOTICE.md for the full
+list of attributions, and public/fonts/Monoton-OFL.txt for the font license.
