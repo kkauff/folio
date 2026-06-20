@@ -1,0 +1,78 @@
+name: Release
+
+# Build and publish installers whenever a version tag (e.g. v0.1.0) is pushed.
+# Creates a *draft* GitHub Release with the macOS, Windows, and Linux builds
+# attached; review it, then hit "Publish" to make it public.
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    permissions:
+      contents: write # needed to create the release and upload assets
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: macos-latest # Apple Silicon (M1/M2/M3…)
+            args: --target aarch64-apple-darwin
+          - platform: macos-latest # Intel Macs
+            args: --target x86_64-apple-darwin
+          - platform: ubuntu-22.04 # Linux (.AppImage / .deb)
+            args: ""
+          - platform: windows-latest # Windows (.msi / .exe)
+            args: ""
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Linux build dependencies
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev \
+            libappindicator3-dev \
+            librsvg2-dev \
+            patchelf \
+            file \
+            libxdo-dev \
+            libssl-dev \
+            build-essential
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          # Both macOS targets so either matrix entry can cross-compile.
+          targets: ${{ startsWith(matrix.platform, 'macos') && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - name: Cache Rust build
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: ./src-tauri -> target
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build and publish (tauri-action)
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: Folio ${{ github.ref_name }}
+          releaseBody: |
+            Download the file for your operating system below and follow the
+            install steps in the README. See CHANGELOG / commit history for
+            what's new.
+          releaseDraft: true
+          prerelease: false
+          args: ${{ matrix.args }}
