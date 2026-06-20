@@ -34,14 +34,23 @@ Pick the file that matches your computer:
 
 ### First time you open it
 
-Folio isn't yet signed with a paid developer certificate, so your system may show
-a one-time "unidentified developer" warning. This is expected for a new open-source
-app — here's how to get past it:
+Folio isn't yet signed with a paid developer certificate, so your system shows a
+one-time security warning. This is expected for a new open-source app — here's
+how to get past it.
 
-- **Mac:** Right-click (or Control-click) the **Folio** app and choose **Open**,
-  then click **Open** again in the dialog. You only need to do this once.
-- **Windows:** If "Windows protected your PC" appears, click **More info → Run
-  anyway**.
+**Mac** — you may see *"Apple could not verify Folio is free of malware…"*. Drag
+**Folio** into your **Applications** folder first, then:
+
+1. Double-click **Folio**, and click **Done** on the warning.
+2. Open  menu → **System Settings → Privacy & Security**.
+3. Scroll to **Security**, find *"Folio" was blocked…*, and click **Open Anyway**
+   (confirm with Touch ID or your password). Folio opens normally from then on.
+
+> Prefer the terminal? This does the same thing in one line:
+> `xattr -dr com.apple.quarantine /Applications/Folio.app`
+
+**Windows** — if *"Windows protected your PC"* appears, click **More info → Run
+anyway**.
 
 ---
 
