@@ -1,8 +1,8 @@
 name: Release
 
 # Build and publish installers whenever a version tag (e.g. v0.1.0) is pushed.
-# Creates a *draft* GitHub Release with the macOS, Windows, and Linux builds
-# attached; review it, then hit "Publish" to make it public.
+# Publishes a public GitHub Release with the macOS, Windows, and Linux builds
+# attached, visible to everyone (including logged-out visitors) immediately.
 on:
   push:
     tags:
@@ -73,6 +73,6 @@ jobs:
             Download the file for your operating system below and follow the
             install steps in the README. See CHANGELOG / commit history for
             what's new.
-          releaseDraft: true
+          releaseDraft: false
           prerelease: false
           args: ${{ matrix.args }}
